@@ -1,0 +1,355 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Ad Service",
+    "description": "Advertisement management",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "advertisement"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/ads": {
+      "get": {
+        "operationId": "AdService_ListAds",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.ListAdsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": " - AD_STATUS_UNSPECIFIED: always define a zero value",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "AD_STATUS_UNSPECIFIED",
+              "AD_STATUS_ACTIVE",
+              "AD_STATUS_SOLD",
+              "AD_STATUS_BANNED",
+              "AD_STATUS_INACTIVE"
+            ],
+            "default": "AD_STATUS_UNSPECIFIED"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "cursor-based is better than offset for large datasets",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "advertisement"
+        ]
+      },
+      "post": {
+        "operationId": "AdService_CreateAd",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.CreateAdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.CreateAdRequest"
+            }
+          }
+        ],
+        "tags": [
+          "advertisement"
+        ]
+      }
+    },
+    "/v1/ads/{adId}": {
+      "get": {
+        "operationId": "AdService_GetAd",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.GetAdResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "adId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "advertisement"
+        ]
+      }
+    },
+    "/v1/ads/{id}/deactivate": {
+      "patch": {
+        "operationId": "AdService_Deactivate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.DeactivateResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api_gateway.ad.v1.AdService.DeactivateBody"
+            }
+          }
+        ],
+        "tags": [
+          "advertisement"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "api_gateway.ad.v1.Ad": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "authorId": {
+          "type": "string"
+        },
+        "price": {
+          "$ref": "#/definitions/google.type.Money",
+          "title": "never float/double for money"
+        },
+        "status": {
+          "$ref": "#/definitions/api_gateway.ad.v1.AdStatus"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "never string for timestamps"
+        },
+        "review": {
+          "$ref": "#/definitions/api_gateway.ad.v1.AdReview"
+        }
+      },
+      "title": "Top-level reusable message — NOT nested inside a response\nNested messages cannot be referenced from other messages or files"
+    },
+    "api_gateway.ad.v1.AdReview": {
+      "type": "object",
+      "properties": {
+        "avgReview": {
+          "$ref": "#/definitions/google.type.Decimal"
+        }
+      }
+    },
+    "api_gateway.ad.v1.AdService.DeactivateBody": {
+      "type": "object"
+    },
+    "api_gateway.ad.v1.AdStatus": {
+      "type": "string",
+      "enum": [
+        "AD_STATUS_UNSPECIFIED",
+        "AD_STATUS_ACTIVE",
+        "AD_STATUS_SOLD",
+        "AD_STATUS_BANNED",
+        "AD_STATUS_INACTIVE"
+      ],
+      "default": "AD_STATUS_UNSPECIFIED",
+      "description": "- AD_STATUS_UNSPECIFIED: always define a zero value",
+      "title": "Use enums — never strings for finite state\nStrings: no validation, typo-prone, no exhaustive switch in Go"
+    },
+    "api_gateway.ad.v1.CreateAdRequest": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "authorId": {
+          "type": "string"
+        },
+        "price": {
+          "$ref": "#/definitions/google.type.Money"
+        }
+      }
+    },
+    "api_gateway.ad.v1.CreateAdResponse": {
+      "type": "object",
+      "properties": {
+        "ad": {
+          "$ref": "#/definitions/api_gateway.ad.v1.Ad"
+        }
+      }
+    },
+    "api_gateway.ad.v1.DeactivateResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/api_gateway.ad.v1.AdStatus"
+        }
+      }
+    },
+    "api_gateway.ad.v1.GetAdResponse": {
+      "type": "object",
+      "properties": {
+        "ad": {
+          "$ref": "#/definitions/api_gateway.ad.v1.Ad"
+        }
+      }
+    },
+    "api_gateway.ad.v1.ListAdsResponse": {
+      "type": "object",
+      "properties": {
+        "ads": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/api_gateway.ad.v1.Ad"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "title": "empty string = last page"
+        }
+      }
+    },
+    "google.protobuf.Any": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "google.rpc.Status": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/google.protobuf.Any"
+          }
+        }
+      }
+    },
+    "google.type.Decimal": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "The decimal value, as a string.\n\nThe string representation consists of an optional sign, `+` (`U+002B`)\nor `-` (`U+002D`), followed by a sequence of zero or more decimal digits\n(\"the integer\"), optionally followed by a fraction, optionally followed\nby an exponent.\n\nThe fraction consists of a decimal point followed by zero or more decimal\ndigits. The string must contain at least one digit in either the integer\nor the fraction. The number formed by the sign, the integer and the\nfraction is referred to as the significand.\n\nThe exponent consists of the character `e` (`U+0065`) or `E` (`U+0045`)\nfollowed by one or more decimal digits.\n\nServices **should** normalize decimal values before storing them by:\n\n  - Removing an explicitly-provided `+` sign (`+2.5` -\u003e `2.5`).\n  - Replacing a zero-length integer value with `0` (`.5` -\u003e `0.5`).\n  - Coercing the exponent character to lower-case (`2.5E8` -\u003e `2.5e8`).\n  - Removing an explicitly-provided zero exponent (`2.5e0` -\u003e `2.5`).\n\nServices **may** perform additional normalization based on its own needs\nand the internal decimal implementation selected, such as shifting the\ndecimal point and exponent value together (example: `2.5e-1` \u003c-\u003e `0.25`).\nAdditionally, services **may** preserve trailing zeroes in the fraction\nto indicate increased precision, but are not required to do so.\n\nNote that only the `.` character is supported to divide the integer\nand the fraction; `,` **should not** be supported regardless of locale.\nAdditionally, thousand separators **should not** be supported. If a\nservice does support them, values **must** be normalized.\n\nThe ENBF grammar is:\n\n    DecimalString =\n      [Sign] Significand [Exponent];\n\n    Sign = '+' | '-';\n\n    Significand =\n      Digits ['.'] [Digits] | [Digits] '.' Digits;\n\n    Exponent = ('e' | 'E') [Sign] Digits;\n\n    Digits = { '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' };\n\nServices **should** clearly document the range of supported values, the\nmaximum supported precision (total number of digits), and, if applicable,\nthe scale (number of digits after the decimal point), as well as how it\nbehaves when receiving out-of-bounds values.\n\nServices **may** choose to accept values passed as input even when the\nvalue has a higher precision or scale than the service supports, and\n**should** round the value to fit the supported scale. Alternatively, the\nservice **may** error with `400 Bad Request` (`INVALID_ARGUMENT` in gRPC)\nif precision would be lost.\n\nServices **should** error with `400 Bad Request` (`INVALID_ARGUMENT` in\ngRPC) if the service receives a value outside of the supported range."
+        }
+      },
+      "description": "A representation of a decimal value, such as 2.5. Clients may convert values\ninto language-native decimal formats, such as Java's [BigDecimal][] or\nPython's [decimal.Decimal][].\n\n[BigDecimal]:\nhttps://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigDecimal.html\n[decimal.Decimal]: https://docs.python.org/3/library/decimal.html"
+    },
+    "google.type.Money": {
+      "type": "object",
+      "properties": {
+        "currencyCode": {
+          "type": "string",
+          "description": "The three-letter currency code defined in ISO 4217."
+        },
+        "units": {
+          "type": "string",
+          "format": "int64",
+          "description": "The whole units of the amount.\nFor example if `currencyCode` is `\"USD\"`, then 1 unit is one US dollar."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of nano (10^-9) units of the amount.\nThe value must be between -999,999,999 and +999,999,999 inclusive.\nIf `units` is positive, `nanos` must be positive or zero.\nIf `units` is zero, `nanos` can be positive, zero, or negative.\nIf `units` is negative, `nanos` must be negative or zero.\nFor example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000."
+        }
+      },
+      "description": "Represents an amount of money with its currency type."
+    }
+  }
+}

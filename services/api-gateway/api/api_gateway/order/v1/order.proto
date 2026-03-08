@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package api_gateway.order.v1;
+
+option go_package = "api-gateway/pkg/order/v1;orderV1";
+
+import "google/type/money.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Order"
+    description: "Order management"
+    version: "1.0"
+  }
+};
+
+service OrderService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {name: "orders"};
+
+  // Создать заказ
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse){
+    option (google.api.http) = {
+      post: "/v1/order"
+      body: "*" 
+    };
+  }
+}
+
+message CreateOrderRequest {
+    string ad_id = 1;
+    string category = 2;
+    string client_id = 3;
+    google.type.Money price = 4;
+}
+
+message CreateOrderResponse {
+    string order_id = 1;
+    string order_status = 2;
+}

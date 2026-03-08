@@ -1,0 +1,17 @@
+grpc_server:
+  port: 7002
+  max_connection_idle: 30s
+  max_connection_age:  5m
+  time:                10s
+  timeout:             5s
+
+http_server:
+  port:       8080
+  admin_port: 8081
+
+graceful:
+  timeout: 30s
+
+service:
+  ad-service:    "ad-service:7002"
+  order-service: "order-service:7002"

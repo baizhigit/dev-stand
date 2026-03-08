@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package api_gateway.ad.v1;
+
+// go_package MUST match the actual directory where files are generated
+// option go_package = "github.com/baizhigit/dev-stand/services/api-gateway/internal/pkg/pb/api-gateway/ad/v1";
+option go_package = "api-gateway/pkg/ad/v1;adV1";
+
+import "google/api/annotations.proto";
+import "google/type/money.proto";
+import "google/type/decimal.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Ad Service"
+    description: "Advertisement management"
+    version: "1.0"
+  }
+};
+
+// Use enums — never strings for finite state
+// Strings: no validation, typo-prone, no exhaustive switch in Go
+enum AdStatus {
+  AD_STATUS_UNSPECIFIED = 0;  // always define a zero value
+  AD_STATUS_ACTIVE      = 1;
+  AD_STATUS_SOLD        = 2;
+  AD_STATUS_BANNED      = 3;
+  AD_STATUS_INACTIVE    = 4;
+}
+
+// Top-level reusable message — NOT nested inside a response
+// Nested messages cannot be referenced from other messages or files
+message Ad {
+  string                    id          = 1;
+  string                    title       = 2;
+  string                    description = 3;
+  string                    category    = 4;
+  string                    author_id   = 5;
+  google.type.Money         price       = 6;  // never float/double for money
+  AdStatus                  status      = 7;
+  google.protobuf.Timestamp created_at  = 8;  // never string for timestamps
+  AdReview                  review      = 9;
+}
+
+message AdReview {
+  google.type.Decimal avg_review = 1;
+}
+
+service AdService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    name: "advertisement"
+  };
+
+  rpc GetAd(GetAdRequest) returns (GetAdResponse) {
+    option (google.api.http) = {
+      get: "/v1/ads/{ad_id}"     // path param — standard REST resource URL
+    };
+  }
+
+  rpc ListAds(ListAdsRequest) returns (ListAdsResponse) {
+    option (google.api.http) = {
+      get: "/v1/ads"             // query params map to ListAdsRequest fields automatically
+    };
+  }
+
+  rpc CreateAd(CreateAdRequest) returns (CreateAdResponse) {
+    option (google.api.http) = {
+      post: "/v1/ads"
+      body: "*"                  // REQUIRED on POST/PUT/PATCH — without it body is silently ignored
+    };
+  }
+
+  rpc Deactivate(DeactivateRequest) returns (DeactivateResponse) {
+    option (google.api.http) = {
+      patch: "/v1/ads/{id}/deactivate"
+      body: "*"
+    };
+  }
+}
+
+message GetAdRequest     { string ad_id = 1; }
+message GetAdResponse    { Ad ad = 1; }
+
+// Always add pagination — never return unbounded lists
+message ListAdsRequest {
+  string   category   = 1;
+  AdStatus status     = 2;
+  int32    page_size  = 3;
+  string   page_token = 4;  // cursor-based is better than offset for large datasets
+}
+message ListAdsResponse {
+  repeated Ad ads             = 1;
+  string      next_page_token = 2;  // empty string = last page
+}
+
+message CreateAdRequest {
+  string            title     = 1;
+  string            category  = 2;
+  string            author_id = 3;
+  google.type.Money price     = 4;
+}
+message CreateAdResponse { Ad ad = 1; }
+
+message DeactivateRequest  { string   id     = 1; }
+message DeactivateResponse { AdStatus status = 1; }
