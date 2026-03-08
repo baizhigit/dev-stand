@@ -1,0 +1,11 @@
+version: v2
+modules:
+  - path: api
+lint:
+  use:
+    - STANDARD    # enforces naming conventions, casing, field presence
+breaking:
+  use:
+    - FILE        # adding fields is OK, removing/renaming = CI failure
+deps:
+  - buf.build/googleapis/googleapis          # google.api.http, google.type.*

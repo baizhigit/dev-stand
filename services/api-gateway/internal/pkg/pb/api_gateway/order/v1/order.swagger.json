@@ -55,28 +55,50 @@
     "api_gateway.order.v1.CreateOrderRequest": {
       "type": "object",
       "properties": {
-        "adId": {
-          "type": "string"
-        },
-        "category": {
-          "type": "string"
-        },
-        "clientId": {
-          "type": "string"
-        },
-        "price": {
-          "$ref": "#/definitions/google.type.Money"
+        "order": {
+          "$ref": "#/definitions/api_gateway.order.v1.Order"
         }
       }
     },
     "api_gateway.order.v1.CreateOrderResponse": {
       "type": "object",
       "properties": {
+        "details": {
+          "$ref": "#/definitions/api_gateway.order.v1.Details"
+        }
+      }
+    },
+    "api_gateway.order.v1.Details": {
+      "type": "object",
+      "properties": {
         "orderId": {
-          "type": "string"
+          "type": "string",
+          "title": "идентификатор заказа"
         },
         "orderStatus": {
-          "type": "string"
+          "type": "string",
+          "title": "статус заказа"
+        }
+      }
+    },
+    "api_gateway.order.v1.Order": {
+      "type": "object",
+      "properties": {
+        "adId": {
+          "type": "string",
+          "title": "Уникальный идентификатор"
+        },
+        "category": {
+          "type": "string",
+          "title": "Категория"
+        },
+        "clientId": {
+          "type": "string",
+          "title": "Идентификатор клиента"
+        },
+        "price": {
+          "$ref": "#/definitions/google.type.Money",
+          "title": "Стоимость"
         }
       }
     },

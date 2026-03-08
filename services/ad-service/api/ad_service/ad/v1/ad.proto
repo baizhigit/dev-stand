@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package ad_service.ad.v1;
+
+option go_package = "ad-service/pkg/ad/v1;adV1";
+
+import "google/api/annotations.proto";
+import "google/type/money.proto";
+import "google/type/decimal.proto";
+import "google/protobuf/timestamp.proto";
+
+enum AdStatus {
+  AD_STATUS_UNSPECIFIED = 0;  // always define a zero value
+  AD_STATUS_ACTIVE      = 1;
+  AD_STATUS_SOLD        = 2;
+  AD_STATUS_BANNED      = 3;
+  AD_STATUS_INACTIVE    = 4;
+}
+
+message Ad {
+  string                    id          = 1;
+  string                    title       = 2;
+  string                    description = 3;
+  string                    category    = 4;
+  string                    author_id   = 5;
+  google.type.Money         price       = 6;  // never float/double for money
+  AdStatus                  status      = 7;
+  google.protobuf.Timestamp created_at  = 8;  // never string for timestamps
+  AdReview                  review      = 9;
+}
+
+message AdReview {
+  google.type.Decimal avg_review = 1;
+}
+
+message CreateAdRequest{
+  // Заголовок
+  string title = 1;
+  // Категория
+  string category = 2;
+  // ID автор
+  string author_id = 3;
+  // Цена
+  google.type.Money price = 4;
+}
+
+message CreateAdResponse{
+  Ad ad  = 1;
+}
+
+message DeactivateRequest{
+  string id = 1;
+}
+
+message DeactivateResponse{
+  AdStatus status = 1;
+}
+
+message ListAdsRequest {
+  string   category   = 1;
+  AdStatus status     = 2;
+  int32    page_size  = 3;
+  string   page_token = 4;  // cursor-based is better than offset for large datasets
+}
+message ListAdsResponse {
+  repeated Ad ads             = 1;
+  string      next_page_token = 2;  // empty string = last page
+}
+
+message GetAdRequest{
+  string  ad_id = 1;
+}
+
+message GetAdResponse    { 
+    Ad ad = 1; 
+}
+
+service AdService {
+  // Список объявлений
+  rpc ListAds(ListAdsRequest) returns(ListAdsResponse);
+  // получить объявление по id
+  rpc GetAd(GetAdRequest) returns (GetAdResponse);
+  // создать объявление
+  rpc CreateAd(CreateAdRequest) returns (CreateAdResponse);
+  // снять видимость
+  rpc Deactivate(DeactivateRequest) returns (DeactivateResponse);
+}

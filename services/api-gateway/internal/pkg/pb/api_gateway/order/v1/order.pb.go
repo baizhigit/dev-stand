@@ -24,19 +24,88 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Order struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Уникальный идентификатор
+	AdId string `protobuf:"bytes,1,opt,name=ad_id,json=adId,proto3" json:"ad_id,omitempty"`
+	// Категория
+	Category string `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`
+	// Идентификатор клиента
+	ClientId string `protobuf:"bytes,3,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	// Стоимость
+	Price         *money.Money `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Order) Reset() {
+	*x = Order{}
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Order) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Order) ProtoMessage() {}
+
+func (x *Order) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Order.ProtoReflect.Descriptor instead.
+func (*Order) Descriptor() ([]byte, []int) {
+	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Order) GetAdId() string {
+	if x != nil {
+		return x.AdId
+	}
+	return ""
+}
+
+func (x *Order) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+func (x *Order) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *Order) GetPrice() *money.Money {
+	if x != nil {
+		return x.Price
+	}
+	return nil
+}
+
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdId          string                 `protobuf:"bytes,1,opt,name=ad_id,json=adId,proto3" json:"ad_id,omitempty"`
-	Category      string                 `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`
-	ClientId      string                 `protobuf:"bytes,3,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	Price         *money.Money           `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	Order         *Order                 `protobuf:"bytes,1,opt,name=order,proto3" json:"order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateOrderRequest) Reset() {
 	*x = CreateOrderRequest{}
-	mi := &file_api_gateway_order_v1_order_proto_msgTypes[0]
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -48,7 +117,7 @@ func (x *CreateOrderRequest) String() string {
 func (*CreateOrderRequest) ProtoMessage() {}
 
 func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_order_v1_order_proto_msgTypes[0]
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -61,48 +130,80 @@ func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
-	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{0}
+	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateOrderRequest) GetAdId() string {
+func (x *CreateOrderRequest) GetOrder() *Order {
 	if x != nil {
-		return x.AdId
-	}
-	return ""
-}
-
-func (x *CreateOrderRequest) GetCategory() string {
-	if x != nil {
-		return x.Category
-	}
-	return ""
-}
-
-func (x *CreateOrderRequest) GetClientId() string {
-	if x != nil {
-		return x.ClientId
-	}
-	return ""
-}
-
-func (x *CreateOrderRequest) GetPrice() *money.Money {
-	if x != nil {
-		return x.Price
+		return x.Order
 	}
 	return nil
 }
 
+type Details struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// идентификатор заказа
+	OrderId string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	// статус заказа
+	OrderStatus   string `protobuf:"bytes,2,opt,name=order_status,json=orderStatus,proto3" json:"order_status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Details) Reset() {
+	*x = Details{}
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Details) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Details) ProtoMessage() {}
+
+func (x *Details) ProtoReflect() protoreflect.Message {
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Details.ProtoReflect.Descriptor instead.
+func (*Details) Descriptor() ([]byte, []int) {
+	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Details) GetOrderId() string {
+	if x != nil {
+		return x.OrderId
+	}
+	return ""
+}
+
+func (x *Details) GetOrderStatus() string {
+	if x != nil {
+		return x.OrderStatus
+	}
+	return ""
+}
+
 type CreateOrderResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	OrderStatus   string                 `protobuf:"bytes,2,opt,name=order_status,json=orderStatus,proto3" json:"order_status,omitempty"`
+	Details       *Details               `protobuf:"bytes,1,opt,name=details,proto3" json:"details,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateOrderResponse) Reset() {
 	*x = CreateOrderResponse{}
-	mi := &file_api_gateway_order_v1_order_proto_msgTypes[1]
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -114,7 +215,7 @@ func (x *CreateOrderResponse) String() string {
 func (*CreateOrderResponse) ProtoMessage() {}
 
 func (x *CreateOrderResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_gateway_order_v1_order_proto_msgTypes[1]
+	mi := &file_api_gateway_order_v1_order_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -127,36 +228,33 @@ func (x *CreateOrderResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrderResponse) Descriptor() ([]byte, []int) {
-	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{1}
+	return file_api_gateway_order_v1_order_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateOrderResponse) GetOrderId() string {
+func (x *CreateOrderResponse) GetDetails() *Details {
 	if x != nil {
-		return x.OrderId
+		return x.Details
 	}
-	return ""
-}
-
-func (x *CreateOrderResponse) GetOrderStatus() string {
-	if x != nil {
-		return x.OrderStatus
-	}
-	return ""
+	return nil
 }
 
 var File_api_gateway_order_v1_order_proto protoreflect.FileDescriptor
 
 const file_api_gateway_order_v1_order_proto_rawDesc = "" +
 	"\n" +
-	" api_gateway/order/v1/order.proto\x12\x14api_gateway.order.v1\x1a\x17google/type/money.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\x8c\x01\n" +
-	"\x12CreateOrderRequest\x12\x13\n" +
+	" api_gateway/order/v1/order.proto\x12\x14api_gateway.order.v1\x1a\x17google/type/money.proto\x1a\x1cgoogle/api/annotations.proto\x1a.protoc-gen-openapiv2/options/annotations.proto\"\x7f\n" +
+	"\x05Order\x12\x13\n" +
 	"\x05ad_id\x18\x01 \x01(\tR\x04adId\x12\x1a\n" +
 	"\bcategory\x18\x02 \x01(\tR\bcategory\x12\x1b\n" +
 	"\tclient_id\x18\x03 \x01(\tR\bclientId\x12(\n" +
-	"\x05price\x18\x04 \x01(\v2\x12.google.type.MoneyR\x05price\"S\n" +
-	"\x13CreateOrderResponse\x12\x19\n" +
+	"\x05price\x18\x04 \x01(\v2\x12.google.type.MoneyR\x05price\"G\n" +
+	"\x12CreateOrderRequest\x121\n" +
+	"\x05order\x18\x01 \x01(\v2\x1b.api_gateway.order.v1.OrderR\x05order\"G\n" +
+	"\aDetails\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12!\n" +
-	"\forder_status\x18\x02 \x01(\tR\vorderStatus2\x95\x01\n" +
+	"\forder_status\x18\x02 \x01(\tR\vorderStatus\"N\n" +
+	"\x13CreateOrderResponse\x127\n" +
+	"\adetails\x18\x01 \x01(\v2\x1d.api_gateway.order.v1.DetailsR\adetails2\x95\x01\n" +
 	"\fOrderService\x12x\n" +
 	"\vCreateOrder\x12(.api_gateway.order.v1.CreateOrderRequest\x1a).api_gateway.order.v1.CreateOrderResponse\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/order\x1a\v\x92A\b\n" +
 	"\x06ordersBE\x92A \x12\x1e\n" +
@@ -174,21 +272,25 @@ func file_api_gateway_order_v1_order_proto_rawDescGZIP() []byte {
 	return file_api_gateway_order_v1_order_proto_rawDescData
 }
 
-var file_api_gateway_order_v1_order_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_api_gateway_order_v1_order_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_gateway_order_v1_order_proto_goTypes = []any{
-	(*CreateOrderRequest)(nil),  // 0: api_gateway.order.v1.CreateOrderRequest
-	(*CreateOrderResponse)(nil), // 1: api_gateway.order.v1.CreateOrderResponse
-	(*money.Money)(nil),         // 2: google.type.Money
+	(*Order)(nil),               // 0: api_gateway.order.v1.Order
+	(*CreateOrderRequest)(nil),  // 1: api_gateway.order.v1.CreateOrderRequest
+	(*Details)(nil),             // 2: api_gateway.order.v1.Details
+	(*CreateOrderResponse)(nil), // 3: api_gateway.order.v1.CreateOrderResponse
+	(*money.Money)(nil),         // 4: google.type.Money
 }
 var file_api_gateway_order_v1_order_proto_depIdxs = []int32{
-	2, // 0: api_gateway.order.v1.CreateOrderRequest.price:type_name -> google.type.Money
-	0, // 1: api_gateway.order.v1.OrderService.CreateOrder:input_type -> api_gateway.order.v1.CreateOrderRequest
-	1, // 2: api_gateway.order.v1.OrderService.CreateOrder:output_type -> api_gateway.order.v1.CreateOrderResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	4, // 0: api_gateway.order.v1.Order.price:type_name -> google.type.Money
+	0, // 1: api_gateway.order.v1.CreateOrderRequest.order:type_name -> api_gateway.order.v1.Order
+	2, // 2: api_gateway.order.v1.CreateOrderResponse.details:type_name -> api_gateway.order.v1.Details
+	1, // 3: api_gateway.order.v1.OrderService.CreateOrder:input_type -> api_gateway.order.v1.CreateOrderRequest
+	3, // 4: api_gateway.order.v1.OrderService.CreateOrder:output_type -> api_gateway.order.v1.CreateOrderResponse
+	4, // [4:5] is the sub-list for method output_type
+	3, // [3:4] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_api_gateway_order_v1_order_proto_init() }
@@ -202,7 +304,7 @@ func file_api_gateway_order_v1_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_gateway_order_v1_order_proto_rawDesc), len(file_api_gateway_order_v1_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

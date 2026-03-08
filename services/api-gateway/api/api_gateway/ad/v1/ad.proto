@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package api_gateway.ad.v1;
 
-// go_package MUST match the actual directory where files are generated
-// option go_package = "github.com/baizhigit/dev-stand/services/api-gateway/internal/pkg/pb/api-gateway/ad/v1";
 option go_package = "api-gateway/pkg/ad/v1;adV1";
 
 import "google/api/annotations.proto";
@@ -48,6 +46,32 @@ message AdReview {
   google.type.Decimal avg_review = 1;
 }
 
+message GetAdRequest     { string ad_id = 1; }
+message GetAdResponse    { Ad ad = 1; }
+
+// Always add pagination — never return unbounded lists
+message ListAdsRequest {
+  string   category   = 1;
+  AdStatus status     = 2;
+  int32    page_size  = 3;
+  string   page_token = 4;  // cursor-based is better than offset for large datasets
+}
+message ListAdsResponse {
+  repeated Ad ads             = 1;
+  string      next_page_token = 2;  // empty string = last page
+}
+
+message CreateAdRequest {
+  string            title     = 1;
+  string            category  = 2;
+  string            author_id = 3;
+  google.type.Money price     = 4;
+}
+message CreateAdResponse { Ad ad = 1; }
+
+message DeactivateRequest  { string   id     = 1; }
+message DeactivateResponse { AdStatus status = 1; }
+
 service AdService {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
     name: "advertisement"
@@ -79,29 +103,3 @@ service AdService {
     };
   }
 }
-
-message GetAdRequest     { string ad_id = 1; }
-message GetAdResponse    { Ad ad = 1; }
-
-// Always add pagination — never return unbounded lists
-message ListAdsRequest {
-  string   category   = 1;
-  AdStatus status     = 2;
-  int32    page_size  = 3;
-  string   page_token = 4;  // cursor-based is better than offset for large datasets
-}
-message ListAdsResponse {
-  repeated Ad ads             = 1;
-  string      next_page_token = 2;  // empty string = last page
-}
-
-message CreateAdRequest {
-  string            title     = 1;
-  string            category  = 2;
-  string            author_id = 3;
-  google.type.Money price     = 4;
-}
-message CreateAdResponse { Ad ad = 1; }
-
-message DeactivateRequest  { string   id     = 1; }
-message DeactivateResponse { AdStatus status = 1; }
